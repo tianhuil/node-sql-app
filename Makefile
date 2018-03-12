@@ -38,5 +38,5 @@ docker-node:  # doesn't work but kept here for clarity
 	docker run -p 9000:80 -it --net=node-sql-app -e PORT=80 \
 		-e POSTGRES_USER=postgres \
 		-e POSTGRES_PASSWORD=abcd \
-		-e POSTGRES_DATABSE='postgres' \
+		-e POSTGRES_DB='postgres' \
 		-e POSTGRESS_HOST='postgres' --name node node-web-app:v1

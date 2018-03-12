@@ -4,11 +4,11 @@ const express = require('express');
 const POSTGRES_USER = process.env.POSTGRES_USER
       POSTGRES_PASSWORD = process.env.POSTGRES_PASSWORD
       POSTGRES_HOST = process.env.POSTGRES_HOST
-      POSTGRES_DATABSE = process.env.POSTGRES_DATABSE
+      POSTGRES_DB = process.env.POSTGRES_DB
 
 console.log(POSTGRES_USER)
 
-const sequelize = new Sequelize(POSTGRES_DATABSE, POSTGRES_USER, POSTGRES_PASSWORD, {
+const sequelize = new Sequelize(POSTGRES_DB, POSTGRES_USER, POSTGRES_PASSWORD, {
   host: POSTGRES_HOST,
   dialect: 'postgres',
 
