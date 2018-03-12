@@ -16,6 +16,9 @@ node:
 	-kubectl delete -f node/node.yaml
 	kubectl create -f node/node.yaml
 
+logs:
+	kubectl logs $$(kubectl get pods --selector=run=node -o jsonpath='{.items[0].metadata.name}{"\n"}')
+
 server:
 	minikube service node-service
 
