@@ -16,8 +16,6 @@ spec:
         - containerPort: 80
           protocol: TCP
         env:
-        - name: PORT
-          value: "80"
         - name: POSTGRES_USER
           valueFrom:
             secretKeyRef:
@@ -28,8 +26,13 @@ spec:
             secretKeyRef:
               name: secret
               key: POSTGRES_PASSWORD
-        - name: POSTGRES_DATABSE
-          value: postgres
+        - name: POSTGRES_DB
+          valueFrom:
+            secretKeyRef:
+              name: secret
+              key: POSTGRES_DB
+        - name: PORT
+          value: "80"
         - name: POSTGRES_HOST
           value: postgres-service.default.svc.cluster.local
 ---
