@@ -3,12 +3,18 @@ kind: Deployment
 metadata:
   name: postgres-deployment
 spec:
-  replicas: 2
+  replicas: 1
+  strategy:
+    type: Recreate
   template:
     metadata:
       labels:
         run: postgres
     spec:
+      volumes:
+      - name: postgres-pv-storage
+        persistentVolumeClaim:
+         claimName: postgres-pv-claim
       containers:
       - name: postgres-pod
         image: onjin/alpine-postgres:latest
@@ -31,6 +37,9 @@ spec:
             secretKeyRef:
               name: secret
               key: POSTGRES_DB
+        volumeMounts:
+        - name: postgres-pv-storage
+          mountPath: "/var/lib/postgresql/data"
 ---
 apiVersion: v1
 kind: Service
@@ -41,8 +50,35 @@ metadata:
 spec:
   type: LoadBalancer
   ports:
-    - port: 5432
-      targetPort: 5432
-      protocol: TCP
+  - port: 5432
+    targetPort: 5432
+    protocol: TCP
   selector:
     run: postgres
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: postgres-pv-volume
+  labels:
+    type: local
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 1Gi
+  accessModes:
+  - ReadWriteOnce
+  hostPath:
+    path: "/tmp/data"
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: postgres-pv-claim
+spec:
+  storageClassName: manual
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
