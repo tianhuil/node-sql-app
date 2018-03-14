@@ -38,7 +38,7 @@ sequelize.sync()
   });
 
 // Constants
-const PORT = 8080;
+const PORT = process.env.NODE_PORT;
 const HOST = '0.0.0.0';
 
 // App
