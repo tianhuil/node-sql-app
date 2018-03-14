@@ -1,42 +1,35 @@
-.PHONY: start secret postgres node server
+.PHONY: network postgres node
 
-start:
-	minikube start
+POSTGRES_USER=postgres_user
+POSTGRES_PASSWORD=password
+POSTGRES_DB=postgres
+POSTGRES_NAME=postgres
 
-secret:
-	-kubectl delete -f secret/secret.yaml
-	kubectl create -f secret/secret.yaml
+NODE_NAME=node
 
-postgres:
-	-kubectl delete -f postgres/postgres.yaml
-	kubectl create -f postgres/postgres.yaml
-
-node:
-	eval $$(minikube docker-env) && docker build -t node-web-app:v1 node/.
-	-kubectl delete -f node/node.yaml
-	kubectl create -f node/node.yaml
-
-logs:
-	kubectl logs $$(kubectl get pods --selector=run=node -o jsonpath='{.items[0].metadata.name}{"\n"}')
-
-server:
-	minikube service node-service
-
-# Docker commands for debugging
-docker-network:
+# Docker commands
+network:
 	docker network create --driver bridge node-sql-app
 
-docker-postgres:
-	-docker rm -f postgres
-	docker run -p 5432:5432 -it --net=node-sql-app \
-		-e POSTGRES_PASSWORD=abcd --name postgres \
+postgres:
+	-docker rm -f $(POSTGRES_NAME)
+	docker run -p 5432:5432 -it \
+		--network=node-sql-app \
+		-e POSTGRES_USER=$(POSTGRES_USER) \
+		-e POSTGRES_PASSWORD=$(POSTGRES_PASSWORD) \
+		-e POSTGRES_DB=$(POSTGRES_DB) \
+		--name $(POSTGRES_NAME) \
 		-d onjin/alpine-postgres
 
-docker-node:  # doesn't work but kept here for clarity
-	-docker rm -f node
+node:  # doesn't work but kept here for clarity
+	-docker rm -f $(NODE_NAME)
 	docker build -t node-web-app:v1 node/.
-	docker run -p 9000:80 -it --net=node-sql-app -e PORT=80 \
-		-e POSTGRES_USER=postgres \
-		-e POSTGRES_PASSWORD=abcd \
-		-e POSTGRES_DB='postgres' \
-		-e POSTGRESS_HOST='postgres' --name node node-web-app:v1
+	docker run -p 9000:80 -it \
+		--network=node-sql-app \
+		-e PORT=80 \
+		-e POSTGRES_USER=$(POSTGRES_USER) \
+		-e POSTGRES_PASSWORD=$(POSTGRES_PASSWORD) \
+		-e POSTGRES_DB=$(POSTGRES_DB) \
+		-e POSTGRES_HOST='postgres' \
+		--name $(NODE_NAME) \
+		node-web-app:v1
