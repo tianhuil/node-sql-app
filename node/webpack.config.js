@@ -7,7 +7,7 @@ var buildPath = path.resolve(__dirname, 'public', 'build');
 
 module.exports = {
   entry: [
-    'webpack-hot-middleware/client?reload=true', 
+    'webpack-hot-middleware/client?reload=true',
     javascriptEntryPath,
     htmlEntryPath
   ],
@@ -23,9 +23,9 @@ module.exports = {
     }, {
       test: /\.html$/,
       loader: 'file?name=[name].[ext]',
-    }], 
+    }],
   },
-  plugins: [ 
+  plugins: [
     new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoErrorsPlugin()
