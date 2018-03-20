@@ -1,11 +1,10 @@
 FROM mhart/alpine-node:9.8.0
 
-WORKDIR /usr/src/app
-
+WORKDIR /var/app
 COPY package*.json ./
-RUN npm install
+RUN npm install --production  # Cache installation
 
-COPY index.js ./
+COPY . /var/app/
 
 EXPOSE 80
 

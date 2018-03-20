@@ -13,7 +13,7 @@ NETWORK_NAME=node-sql-app
 
 # Docker commands
 network:
-	-docker network rm -f $(NETWORK_NAME)
+	-docker network rm $(NETWORK_NAME)
 	docker network create --driver bridge $(NETWORK_NAME)
 
 postgres:
@@ -28,7 +28,7 @@ postgres:
 
 node:  # doesn't work but kept here for clarity
 	-docker rm -f $(NODE_NAME)
-	docker build -t node-web-app:v1 node/.
+	docker build -t node-web-app:v1 node/. -f ./node/Dockerfile.Prod
 	docker run -p $(NODE_PORT):$(NODE_PORT) -it \
 		--network=$(NETWORK_NAME) \
 		-e NODE_PORT=$(NODE_PORT) \
