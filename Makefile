@@ -1,5 +1,7 @@
 .PHONY: network postgres api
 
+SHELL=bash
+
 POSTGRES_USER=postgres_user
 POSTGRES_PASSWORD=password
 POSTGRES_DB=postgres
@@ -42,8 +44,9 @@ api-dev: api-prod
 		--build-arg API_TAG_PROD=$(API_TAG_PROD) \
 		--build-arg API_WORKDIR=$(API_WORKDIR) \
 		api/.
+	# Note that the local volume mount path must be absolute
 	docker run -p $(API_PORT):$(API_PORT) -it \
-		-v $(shell pwd)/api/src:$(API_WORKDIR)/src \
+		--volume $(shell pwd)/api/src:$(API_WORKDIR)/src \
 		--network=$(NETWORK_NAME) \
 		-e API_PORT=$(API_PORT) \
 		-e POSTGRES_USER=$(POSTGRES_USER) \

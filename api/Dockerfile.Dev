@@ -1,6 +1,8 @@
 ARG API_TAG_PROD
 FROM $API_TAG_PROD
 
+# Note: this ARG must be after FROM
+# See https://docs.docker.com/engine/reference/builder/#understand-how-arg-and-from-interact
 ARG API_WORKDIR
 WORKDIR $API_WORKDIR
 
