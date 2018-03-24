@@ -1,30 +1,30 @@
 var path = require('path');
 var webpack = require('webpack');
-
-var javascriptEntryPath = path.resolve(__dirname, 'src', 'index.js');
-var buildPath = path.resolve(__dirname, 'public', 'build');
+const HtmlWebPackPlugin = require("html-webpack-plugin");
 
 module.exports = {
   entry: [
-    'webpack-hot-middleware/client?reload=true',
-    javascriptEntryPath
+    path.resolve(__dirname, 'src', 'js', 'app.js')
   ],
   output: {
-    path: buildPath,
-    filename: 'bundle.js',
+    path: path.resolve(__dirname, 'dist'),
+    filename: 'js/[name].js',
   },
   module: {
     rules: [{
       test: /\.js$/,
       exclude: /(node_modules|bower_components)/,
-      loaders: ['babel-loader?presets[]=es2015'],
-    }, {
-      test: /\.html$/,
-      loader: 'file?name=[name].[ext]',
+      use: {
+        loader: "babel-loader"
+      }
     }],
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoEmitOnErrorsPlugin()
+    new webpack.NoEmitOnErrorsPlugin(),
+    new HtmlWebPackPlugin({
+      template: "./src/index.html",
+      filename: "./index.html"
+    })
   ]
 }
