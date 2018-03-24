@@ -1,0 +1,11 @@
+ARG API_TAG_PROD
+
+FROM $API_TAG_PROD
+
+WORKDIR /var/app
+
+# Cache Installation
+ENV NODE_ENV=development
+RUN npm install --only=dev
+
+CMD ["npm", "run", "dev"]

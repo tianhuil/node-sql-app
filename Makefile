@@ -1,4 +1,4 @@
-.PHONY: network postgres node
+.PHONY: network postgres api
 
 POSTGRES_USER=postgres_user
 POSTGRES_PASSWORD=password
@@ -6,10 +6,12 @@ POSTGRES_DB=postgres
 POSTGRES_NAME=postgres
 POSTGRES_HOST=postgres-host
 
-NODE_NAME=node
-NODE_PORT=9000
+API_NAME=api
+API_TAG_DEV=api:dev
+API_TAG_PROD=api:prod
+API_PORT=9000
 
-NETWORK_NAME=node-sql-app
+NETWORK_NAME=api-sql-app
 
 # Docker commands
 network:
@@ -26,15 +28,23 @@ postgres:
 		-d onjin/alpine-postgres
 	docker network connect --alias $(POSTGRES_HOST) $(NETWORK_NAME) $(POSTGRES_NAME)
 
-node:  # doesn't work but kept here for clarity
-	-docker rm -f $(NODE_NAME)
-	docker build -t node-web-app:v1 node/. -f ./node/Dockerfile.Prod
-	docker run -p $(NODE_PORT):$(NODE_PORT) -it \
+api-prod:
+	docker build -t $(API_TAG_PROD) api/. -f ./api/Dockerfile.Prod
+
+api-dev: api-prod
+	-docker rm -f $(API_NAME)
+	docker build -t $(API_TAG_DEV) \
+		-f ./api/Dockerfile.Dev \
+		--build-arg API_TAG_PROD=$(API_TAG_PROD) \
+		api/.
+	docker run -p $(API_PORT):$(API_PORT) -it \
 		--network=$(NETWORK_NAME) \
-		-e NODE_PORT=$(NODE_PORT) \
+		-e API_PORT=$(API_PORT) \
 		-e POSTGRES_USER=$(POSTGRES_USER) \
 		-e POSTGRES_PASSWORD=$(POSTGRES_PASSWORD) \
 		-e POSTGRES_DB=$(POSTGRES_DB) \
 		-e POSTGRES_HOST=$(POSTGRES_HOST) \
-		--name $(NODE_NAME) \
-		node-web-app:v1
+		--name $(API_NAME) \
+		$(API_TAG_DEV)
+
+api:api-dev
