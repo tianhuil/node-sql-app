@@ -43,6 +43,7 @@ api-dev: api-prod
 		--build-arg API_WORKDIR=$(API_WORKDIR) \
 		api/.
 	docker run -p $(API_PORT):$(API_PORT) -it \
+		-v $(shell pwd)/api/src:$(API_WORKDIR)/src \
 		--network=$(NETWORK_NAME) \
 		-e API_PORT=$(API_PORT) \
 		-e POSTGRES_USER=$(POSTGRES_USER) \

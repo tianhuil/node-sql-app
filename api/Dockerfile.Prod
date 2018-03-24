@@ -8,9 +8,6 @@ COPY package*.json $API_WORKDIR
 ENV NODE_ENV=production
 RUN npm install --production
 
-# Only copy what is necessary to run in production
-COPY src $API_WORKDIR
-
 EXPOSE 80
 
 CMD [ "npm", "run", "prod" ]
