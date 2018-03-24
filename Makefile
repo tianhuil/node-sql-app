@@ -24,6 +24,7 @@ network:
 
 postgres:
 	-docker rm -f $(POSTGRES_NAME)
+
 	docker run -p 5432:5432 -it \
 		--network=$(NETWORK_NAME) \
 		--network-alias=$(POSTGRES_HOST) \
@@ -46,6 +47,7 @@ api-dev: api-prod
 		--build-arg API_TAG_PROD=$(API_TAG_PROD) \
 		--build-arg API_WORKDIR=$(API_WORKDIR) \
 		api/.
+
 	# Note that the local volume mount path must be absolute
 	docker run -p $(API_PORT):$(API_PORT) -it \
 		--volume $(shell pwd)/api/src:$(API_WORKDIR)/src \
