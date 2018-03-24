@@ -7,6 +7,7 @@ POSTGRES_NAME=postgres
 POSTGRES_HOST=postgres-host
 
 API_NAME=api
+API_WORKDIR=/var/app
 API_TAG_DEV=api:dev
 API_TAG_PROD=api:prod
 API_PORT=9000
@@ -29,13 +30,17 @@ postgres:
 	docker network connect --alias $(POSTGRES_HOST) $(NETWORK_NAME) $(POSTGRES_NAME)
 
 api-prod:
-	docker build -t $(API_TAG_PROD) api/. -f ./api/Dockerfile.Prod
+	docker build -t $(API_TAG_PROD) \
+		-f ./api/Dockerfile.Prod \
+	  --build-arg API_WORKDIR=$(API_WORKDIR) \
+		api/.
 
 api-dev: api-prod
 	-docker rm -f $(API_NAME)
 	docker build -t $(API_TAG_DEV) \
 		-f ./api/Dockerfile.Dev \
 		--build-arg API_TAG_PROD=$(API_TAG_PROD) \
+		--build-arg API_WORKDIR=$(API_WORKDIR) \
 		api/.
 	docker run -p $(API_PORT):$(API_PORT) -it \
 		--network=$(NETWORK_NAME) \

@@ -1,14 +1,15 @@
 FROM mhart/alpine-node:9.8.0
 
-WORKDIR /var/app
+ARG API_WORKDIR
+WORKDIR $API_WORKDIR
 
 # Cache installation before
-COPY package*.json /var/app/
+COPY package*.json $API_WORKDIR
 ENV NODE_ENV=production
 RUN npm install --production
 
 # Only copy what is necessary to run in production
-COPY src /var/app/
+COPY src $API_WORKDIR
 
 EXPOSE 80
 

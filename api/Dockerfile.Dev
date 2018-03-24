@@ -1,8 +1,8 @@
 ARG API_TAG_PROD
-
 FROM $API_TAG_PROD
 
-WORKDIR /var/app
+ARG API_WORKDIR
+WORKDIR $API_WORKDIR
 
 # Cache Installation
 ENV NODE_ENV=development
