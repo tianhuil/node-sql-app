@@ -24,12 +24,13 @@ network:
 postgres:
 	-docker rm -f $(POSTGRES_NAME)
 	docker run -p 5432:5432 -it \
+		--network=$(NETWORK_NAME) \
+		--network-alias=$(POSTGRES_HOST) \
 		-e POSTGRES_USER=$(POSTGRES_USER) \
 		-e POSTGRES_PASSWORD=$(POSTGRES_PASSWORD) \
 		-e POSTGRES_DB=$(POSTGRES_DB) \
 		--name $(POSTGRES_NAME) \
 		-d onjin/alpine-postgres
-	docker network connect --alias $(POSTGRES_HOST) $(NETWORK_NAME) $(POSTGRES_NAME)
 
 api-prod:
 	docker build -t $(API_TAG_PROD) \
