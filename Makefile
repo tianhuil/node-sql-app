@@ -13,6 +13,7 @@ API_WORKDIR=/var/app
 API_TAG_DEV=api:dev
 API_TAG_PROD=api:prod
 API_PORT=9000
+API_HOST=api-host
 
 NETWORK_NAME=api-sql-app
 
@@ -49,6 +50,7 @@ api-dev: api-prod
 	docker run -p $(API_PORT):$(API_PORT) -it \
 		--volume $(shell pwd)/api/src:$(API_WORKDIR)/src \
 		--network=$(NETWORK_NAME) \
+		--network-alias=$(API_HOST) \
 		-e API_PORT=$(API_PORT) \
 		-e POSTGRES_USER=$(POSTGRES_USER) \
 		-e POSTGRES_PASSWORD=$(POSTGRES_PASSWORD) \
