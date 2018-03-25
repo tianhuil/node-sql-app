@@ -76,13 +76,8 @@ app-prod:
 
 	docker build -t $(APP_TAG_PROD) \
 		-f ./app/Dockerfile.Prod \
-	  --build-arg APP_WORKDIR=$(APP_WORKDIR) \
+		--build-arg APP_WORKDIR=$(APP_WORKDIR) \
 		app/.
-
-	# docker run -p $(APP_PORT):$(APP_PORT) -it \
-	# 	--network=$(NETWORK_NAME) \
-	# 	--name $(APP_NAME) \
-	# 	$(APP_TAG_PROD)
 
 app-dev: app-prod
 	-docker rm -f $(APP_NAME)
