@@ -1,12 +1,15 @@
 var path = require('path');
 const HtmlWebPackPlugin = require("html-webpack-plugin");
+const port = process.env.APP_PORT || 80
 
 module.exports = {
   entry: [
     path.resolve(__dirname, 'src', 'js', 'app.js')
   ],
   devServer: {
-    contentBase: "./dist"
+    contentBase: "./dist",
+    port: port,
+    host: '0.0.0.0'
   },
   output: {
     path: path.resolve(__dirname, 'dist'),

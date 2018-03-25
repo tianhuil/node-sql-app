@@ -7,8 +7,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack --mode=production",
-    "prod": "http-server dist -p 8080",
-    "dev": "webpack-dev-server --mode=development --hot --inline --host=0.0.0.0"
+    "prod": "http-server dist -p 80",
+    "dev": "webpack-dev-server --mode=development --inline --hot"
   },
   "author": "",
   "license": "ISC",

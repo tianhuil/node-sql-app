@@ -19,7 +19,8 @@ APP_NAME=app
 APP_WORKDIR=/var/app
 APP_TAG_DEV=app:dev
 APP_TAG_PROD=app:prod
-APP_PORT=8080
+APP_PORT=9001
+APP_HOST=app-host
 
 NETWORK_NAME=api-sql-app
 
@@ -89,13 +90,13 @@ app-dev: app-prod
 	docker build -t $(APP_TAG_DEV) \
 		-f ./app/Dockerfile.Dev \
 		--build-arg APP_TAG_PROD=$(APP_TAG_PROD) \
-		--build-arg APP_WORKDIR=$(APP_WORKDIR) \
 		app/.
 
 	# Note that the local volume mount path must be absolute
 	docker run -p $(APP_PORT):$(APP_PORT) -it \
 		--volume $(shell pwd)/app/src:$(APP_WORKDIR)/src \
 		--network=$(NETWORK_NAME) \
-		--network-alias=app \
+		--network-alias=$(APP_HOST) \
 		--name $(APP_NAME) \
+		-e APP_PORT=$(APP_PORT) \
 		$(APP_TAG_DEV)
