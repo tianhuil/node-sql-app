@@ -1,11 +1,13 @@
 var path = require('path');
-var webpack = require('webpack');
 const HtmlWebPackPlugin = require("html-webpack-plugin");
 
 module.exports = {
   entry: [
     path.resolve(__dirname, 'src', 'js', 'app.js')
   ],
+  devServer: {
+    contentBase: "./dist"
+  },
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'js/[name].js',
@@ -20,8 +22,6 @@ module.exports = {
     }],
   },
   plugins: [
-    new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoEmitOnErrorsPlugin(),
     new HtmlWebPackPlugin({
       template: "./src/index.html",
       filename: "./index.html"

@@ -1,4 +1,8 @@
-import FormContainer from "./components/container/FormContainer";
+import React from 'react';
+import ReactDOM from 'react-dom';
+import ShoppingList from "./components/box";
 
-const wrapper = document.getElementById("create-article-form");
-wrapper ? ReactDOM.render(<FormContainer />, wrapper) : false;
+ReactDOM.render(
+  <ShoppingList />,
+  document.getElementById("app")
+);
