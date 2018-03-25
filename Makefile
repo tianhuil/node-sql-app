@@ -58,7 +58,7 @@ api-dev: api-prod
 
 	# Note that the local volume mount path must be absolute
 	docker run -p $(API_PORT):$(API_PORT) -it \
-		--volume $(shell pwd)/api/src:$(API_WORKDIR)/src \
+		--volume $(shell pwd)/api/src:$(API_WORKDIR)/src:ro \
 		--network=$(NETWORK_NAME) \
 		--network-alias=$(API_HOST) \
 		-e API_PORT=$(API_PORT) \
@@ -89,7 +89,7 @@ app-dev: app-prod
 
 	# Note that the local volume mount path must be absolute
 	docker run -p $(APP_PORT):$(APP_PORT) -it \
-		--volume $(shell pwd)/app/src:$(APP_WORKDIR)/src \
+		--volume $(shell pwd)/app/src:$(APP_WORKDIR)/src:ro \
 		--network=$(NETWORK_NAME) \
 		--network-alias=$(APP_HOST) \
 		--name $(APP_NAME) \
