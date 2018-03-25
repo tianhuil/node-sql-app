@@ -1,0 +1,19 @@
+FROM mhart/alpine-node:9
+# get rid of annoying warning
+RUN npm install -g npm@5.8.0
+
+ARG APP_WORKDIR
+WORKDIR $APP_WORKDIR
+COPY package*.json $APP_WORKDIR/
+
+# Need build dependencies
+RUN npm install --development
+
+COPY ./src $APP_WORKDIR/src
+# RUN chmod a+rx $APP_WORKDIR/src
+# RUN chmod a+rx $APP_WORKDIR/src/js
+COPY ./webpack.config.js $APP_WORKDIR
+COPY ./.babelrc $APP_WORKDIR
+RUN npm run build
+
+CMD ["npm", "run", "prod"]
