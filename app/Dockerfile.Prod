@@ -9,11 +9,10 @@ COPY package*.json $APP_WORKDIR/
 # Need build dependencies
 RUN npm install --development
 
-COPY ./src $APP_WORKDIR/src
-# RUN chmod a+rx $APP_WORKDIR/src
-# RUN chmod a+rx $APP_WORKDIR/src/js
-COPY ./webpack.config.js $APP_WORKDIR
 COPY ./.babelrc $APP_WORKDIR
+COPY ./webpack.config.js $APP_WORKDIR
+COPY ./src $APP_WORKDIR/src
+
 RUN npm run build
 
 CMD ["npm", "run", "prod"]
