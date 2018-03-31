@@ -1,7 +1,7 @@
-const express = require('express');
-const postgres = require('./postgres')
+import express from 'express'
+import { setup } from './postgres'
 
-postgres.setup()
+setup()
 
 // Constants
 const PORT = process.env.API_PORT

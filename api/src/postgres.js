@@ -1,10 +1,10 @@
-const Sequelize = require('sequelize');
+import Sequelize from 'sequelize';
 
-function setup() {
-  const POSTGRES_USER = process.env.POSTGRES_USER
-        POSTGRES_PASSWORD = process.env.POSTGRES_PASSWORD
-        POSTGRES_HOST = process.env.POSTGRES_HOST
-        POSTGRES_DB = process.env.POSTGRES_DB
+export function setup() {
+  const POSTGRES_USER = process.env.POSTGRES_USER,
+        POSTGRES_PASSWORD = process.env.POSTGRES_PASSWORD,
+        POSTGRES_HOST = process.env.POSTGRES_HOST,
+        POSTGRES_DB = process.env.POSTGRES_DB,
         POSTGRES_PORT = process.env.POSTGRES_PORT
 
   console.log(POSTGRES_USER)
@@ -37,5 +37,3 @@ function setup() {
       console.log(jane.toJSON());
     });
 }
-
-module.exports.setup = setup;
