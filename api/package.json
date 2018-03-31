@@ -6,7 +6,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon src/index.js",
+    "dev": "nodemon src/index.js --exec babel-node --presets es2015,stage-2",
+    "build": "babel src -d dist --presets es2015,stage-2",
+    "babel-version": "babel --version",
     "prod": "node src/index.js"
   },
   "author": "",
@@ -15,7 +17,11 @@
     "express": "^4.16.2",
     "pg": "^7.4.1",
     "pg-hstore": "^2.3.2",
-    "sequelize": "^4.35.2"
+    "sequelize": "^4.35.2",
+    "babel-cli": "^6.26.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-stage-2": "^6.24.1",
+    "babel-register": "^6.26.0"
   },
   "devDependencies": {
     "nodemon": "^1.17.2"
