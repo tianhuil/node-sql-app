@@ -5,20 +5,20 @@ const POSTGRES_USER = process.env.POSTGRES_USER
       POSTGRES_PASSWORD = process.env.POSTGRES_PASSWORD
       POSTGRES_HOST = process.env.POSTGRES_HOST
       POSTGRES_DB = process.env.POSTGRES_DB
+      POSTGRES_PORT = process.env.POSTGRES_PORT
 
 console.log(POSTGRES_USER)
 
 const sequelize = new Sequelize(POSTGRES_DB, POSTGRES_USER, POSTGRES_PASSWORD, {
   host: POSTGRES_HOST,
+  port: POSTGRES_PORT,
   dialect: 'postgres',
-
   pool: {
     max: 5,
     min: 0,
     acquire: 30000,
     idle: 10000
   },
-
   // http://docs.sequelizejs.com/manual/tutorial/querying.html#operators
   operatorsAliases: false
 });
@@ -38,7 +38,7 @@ sequelize.sync()
   });
 
 // Constants
-const PORT = process.env.API_PORT;
+const PORT = process.env.API_PORT
 const HOST = '0.0.0.0';
 
 // App

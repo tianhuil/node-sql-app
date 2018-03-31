@@ -2,18 +2,20 @@
 
 SHELL=bash
 
+# Postgres port cannot be modified in onjin/alpine-postgres
 POSTGRES_USER=postgres_user
 POSTGRES_PASSWORD=password
 POSTGRES_DB=postgres
 POSTGRES_NAME=postgres
 POSTGRES_HOST=postgres-host
+POSTGRES_PORT=5432
 
 API_NAME=api
 API_WORKDIR=/var/app
 API_TAG_DEV=api:dev
 API_TAG_PROD=api:prod
 API_PORT=9000
-API_HOST=api-host
+API_HOST=localhost
 
 APP_NAME=app
 APP_WORKDIR=/var/app
@@ -32,14 +34,14 @@ network:
 postgres:
 	-docker rm -f $(POSTGRES_NAME)
 
-	docker run -p 5432:5432 -it \
+	docker run -p $(POSTGRES_PORT):$(POSTGRES_PORT) -it \
 		--network=$(NETWORK_NAME) \
 		--network-alias=$(POSTGRES_HOST) \
 		-e POSTGRES_USER=$(POSTGRES_USER) \
 		-e POSTGRES_PASSWORD=$(POSTGRES_PASSWORD) \
 		-e POSTGRES_DB=$(POSTGRES_DB) \
 		--name $(POSTGRES_NAME) \
-		-d onjin/alpine-postgres
+		onjin/alpine-postgres
 
 api-prod:
 	docker build -t $(API_TAG_PROD) \
@@ -60,12 +62,12 @@ api-dev: api-prod
 	docker run -p $(API_PORT):$(API_PORT) -it \
 		--volume $(shell pwd)/api/src:$(API_WORKDIR)/src:ro \
 		--network=$(NETWORK_NAME) \
-		--network-alias=$(API_HOST) \
 		-e API_PORT=$(API_PORT) \
 		-e POSTGRES_USER=$(POSTGRES_USER) \
 		-e POSTGRES_PASSWORD=$(POSTGRES_PASSWORD) \
 		-e POSTGRES_DB=$(POSTGRES_DB) \
 		-e POSTGRES_HOST=$(POSTGRES_HOST) \
+		-e POSTGRES_PORT=$(POSTGRES_PORT) \
 		--name $(API_NAME) \
 		$(API_TAG_DEV)
 
@@ -90,8 +92,8 @@ app-dev: app-prod
 	# Note that the local volume mount path must be absolute
 	docker run -p $(APP_PORT):$(APP_PORT) -it \
 		--volume $(shell pwd)/app/src:$(APP_WORKDIR)/src:ro \
-		--network=$(NETWORK_NAME) \
-		--network-alias=$(APP_HOST) \
 		--name $(APP_NAME) \
+		-e API_HOST=$(API_HOST) \
+		-e API_PORT=$(API_PORT) \
 		-e APP_PORT=$(APP_PORT) \
 		$(APP_TAG_DEV)
