@@ -5,6 +5,6 @@ export function newClient() {
         API_PORT = process.env.API_PORT
 
   return new ApolloClient({
-    uri: `http://localhost:9000/graphql`
+    uri: `http://${API_HOST}:${API_PORT}/graphql`
   });
 }

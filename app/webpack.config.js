@@ -1,5 +1,6 @@
 var path = require('path');
 const HtmlWebPackPlugin = require("html-webpack-plugin");
+const webpack = require("webpack")
 
 module.exports = {
   entry: [
@@ -27,6 +28,10 @@ module.exports = {
     new HtmlWebPackPlugin({
       template: "./src/index.html",
       filename: "./index.html"
-    })
+    }),
+    new webpack.EnvironmentPlugin([
+      'API_HOST',
+      'API_PORT'
+    ])
   ]
 }
