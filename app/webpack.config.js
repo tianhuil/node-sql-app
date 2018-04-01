@@ -1,6 +1,5 @@
 var path = require('path');
 const HtmlWebPackPlugin = require("html-webpack-plugin");
-const port = process.env.APP_PORT || 80
 
 module.exports = {
   entry: [
@@ -8,7 +7,7 @@ module.exports = {
   ],
   devServer: {
     contentBase: "./dist",
-    port: port,
+    port: process.env.APP_PORT || 80,
     host: '0.0.0.0'
   },
   output: {
