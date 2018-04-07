@@ -14,7 +14,7 @@ const query = gql`
         }
         topic
         headline
-        body
+        summary(length: 200, omission: "Not Available")
       }
     }
   }
@@ -35,7 +35,7 @@ class BookList extends React.Component {
               <ul>
               {
                 data.allPosts.edges.map(e =>
-                  <li>
+                  <li key={e.node.id}>
                     <h3>{e.node.headline}</h3>
                     <p>
                       <em>{
@@ -47,9 +47,7 @@ class BookList extends React.Component {
                         e.node.topic ? e.node.topic : "MISC"
                       })
                     </p>
-                    <p>{ e.node.body ?
-                        e.node.body.substring(0, 100) : "No Preview"
-                    }</p>
+                    <p>{ e.node.summary }</p>
                   </li>
                 )
               }
