@@ -103,4 +103,5 @@ app-dev: app-prod
 		--name $(APP_NAME) \
 		-e API_HOST=$(API_HOST) \
 		-e API_PORT=$(API_PORT) \
+		-e APP_PORT=$(APP_PORT) \
 		$(APP_TAG_DEV)
