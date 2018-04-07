@@ -3,12 +3,22 @@ import { Query } from "react-apollo";
 import gql from "graphql-tag";
 
 const query = gql`
-  {
-    books {
-      title
-      author
+{
+  allPosts(last: 5) {
+    totalCount
+    edges {
+      node {
+        id
+        personByAuthorId {
+          fullName
+        }
+        topic
+        headline
+        body
+      }
     }
   }
+}
 `
 
 class BookList extends React.Component {
@@ -20,14 +30,29 @@ class BookList extends React.Component {
           if (error) return <p>Error :(</p>;
 
           return (
-            <div className="shopping-list">
-              <h1>Book List for {this.props.name}</h1>
+            <div className="posts">
+              <h1>Posts ({data.allPosts.totalCount})</h1>
               <ul>
-                {
-                  data.books.map(book =>
-                    <li><b>{book.title}:</b> {book.author}</li>
-                  )
-                }
+              {
+                data.allPosts.edges.map(e =>
+                  <li>
+                    <h3>{e.node.headline}</h3>
+                    <p>
+                      <em>{
+                        e.node.personByAuthorId.fullName ?
+                        e.node.personByAuthorId.fullName : "Anonymous"
+                      }</em>
+                      &nbsp;&nbsp;
+                      ({
+                        e.node.topic ? e.node.topic : "MISC"
+                      })
+                    </p>
+                    <p>{ e.node.body ?
+                        e.node.body.substring(0, 100) : "No Preview"
+                    }</p>
+                  </li>
+                )
+              }
               </ul>
             </div>
           )
