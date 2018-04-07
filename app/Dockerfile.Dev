@@ -1,4 +1,4 @@
 ARG APP_TAG_PROD
 FROM $APP_TAG_PROD
 
-CMD ["npm", "run", "dev"]
+CMD ["sh", "build/dev.sh"]
