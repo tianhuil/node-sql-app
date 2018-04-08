@@ -66,7 +66,7 @@ const PostList = (props) => {
 
   return <div className="posts">
     <h1>Posts ({allPosts.totalCount})</h1>
-    <ul>
+    <ol>
     {
       allPosts.edges.map(e =>
         <li key={e.node.id}>
@@ -82,7 +82,7 @@ const PostList = (props) => {
         </li>
       )
     }
-    </ul>
+    </ol>
     { nextPage }
   </div>
 }
