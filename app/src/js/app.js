@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import BookList from "./components/box";
+import PostList from "./components/post";
 import { ApolloProvider } from "react-apollo";
 
 import { newClient } from "./lib/apollo.js"
@@ -9,8 +9,7 @@ const client = newClient()
 
 const App = () => (
   <ApolloProvider client={client}>
-    <BookList name={"Me"}>
-    </BookList>
+    <PostList />
   </ApolloProvider>
 );
 

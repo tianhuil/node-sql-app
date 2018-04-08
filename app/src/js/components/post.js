@@ -25,7 +25,7 @@ query PostQuery($cursor: Cursor = null) {
 }
 `
 
-const PostList = (props) => {
+const PostPagination = (props) => {
   const allPosts = props.allPosts
   const pageInfo = allPosts.pageInfo
   const fetchMore = props.fetchMore
@@ -87,7 +87,7 @@ const PostList = (props) => {
   </div>
 }
 
-class BookList extends React.Component {
+class PostList extends React.Component {
   render() {
     return (
       <Query query={postQuery}>
@@ -95,11 +95,11 @@ class BookList extends React.Component {
           if (loading) return <p>Loading...</p>;
           if (error) return <p>Error :(</p>;
 
-          return <PostList allPosts={data.allPosts} fetchMore={fetchMore} />
+          return <PostPagination allPosts={data.allPosts} fetchMore={fetchMore} />
         }}
       </Query>
     );
   }
 }
 
-export default BookList
+export default PostList
