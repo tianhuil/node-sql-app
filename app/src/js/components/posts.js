@@ -26,15 +26,14 @@ query PostQuery($cursor: Cursor = null) {
 `
 
 const PostNextPage = (props) => {
-  const fetchMore = props.fetchMore
   const pageInfo = props.pageInfo
 
   const nextPageClick = (e) => {
     e.preventDefault();
-    fetchMore({
+    props.fetchMore({
       query: postQuery,
       variables: {
-        cursor: pageInfo.endCursor
+        cursor: props.pageInfo.endCursor
       },
       updateQuery: (previousResult, { fetchMoreResult }) => {
         const newEdges = fetchMoreResult.allPosts.edges;
@@ -61,33 +60,6 @@ const PostNextPage = (props) => {
   );
 }
 
-const PostPagination = (props) => {
-  const allPosts = props.allPosts
-  const pageInfo = allPosts.pageInfo
-
-  return <div className="posts">
-    <h1>Posts ({allPosts.totalCount})</h1>
-    <ol>
-    {
-      allPosts.edges.map(e =>
-        <li key={e.node.id}>
-          <h3>{e.node.headline}</h3>
-          <p>
-            { e.node.personByAuthorId.fullName &&
-                <em>{e.node.personByAuthorId.fullName}</em> }
-            &nbsp;&nbsp;
-            { e.node.topic &&
-                <span>({e.node.topic})</span> }
-          </p>
-          <p>{ e.node.summary }</p>
-        </li>
-      )
-    }
-    </ol>
-    <PostNextPage fetchMore={props.fetchMore} pageInfo={allPosts.pageInfo}/>
-  </div>
-}
-
 class PostList extends React.Component {
   render() {
     return (
@@ -96,7 +68,29 @@ class PostList extends React.Component {
           if (loading) return <p>Loading...</p>;
           if (error) return <p>Error :(</p>;
 
-          return <PostPagination allPosts={data.allPosts} fetchMore={fetchMore} />
+          const allPosts = data.allPosts
+
+          return <div className="posts">
+            <h1>Posts ({allPosts.totalCount})</h1>
+            <ol>
+            {
+              allPosts.edges.map(e =>
+                <li key={e.node.id}>
+                  <h3>{e.node.headline}</h3>
+                  <p>
+                    { e.node.personByAuthorId.fullName &&
+                        <em>{e.node.personByAuthorId.fullName}</em> }
+                    &nbsp;&nbsp;
+                    { e.node.topic &&
+                        <span>({e.node.topic})</span> }
+                  </p>
+                  <p>{ e.node.summary }</p>
+                </li>
+              )
+            }
+            </ol>
+            <PostNextPage fetchMore={fetchMore} pageInfo={allPosts.pageInfo}/>
+          </div>
         }}
       </Query>
     );
