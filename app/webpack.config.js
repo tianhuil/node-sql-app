@@ -2,7 +2,7 @@ var path = require('path');
 const HtmlWebPackPlugin = require("html-webpack-plugin");
 const webpack = require("webpack")
 
-module.exports = {
+module.exports = (env, argv) => ({
   entry: [
     path.resolve(__dirname, 'src', 'js', 'app.js')
   ],
@@ -34,4 +34,4 @@ module.exports = {
       'API_PORT'
     ])
   ]
-}
+})
