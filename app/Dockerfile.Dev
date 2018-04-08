@@ -1,4 +1,7 @@
 ARG APP_TAG_PROD
 FROM $APP_TAG_PROD
 
+# Need build dependencies
+RUN npm install --development
+
 CMD ["sh", "build/dev.sh"]

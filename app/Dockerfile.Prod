@@ -7,7 +7,7 @@ WORKDIR $APP_WORKDIR
 COPY package*.json $APP_WORKDIR/
 
 # Need build dependencies
-RUN npm install --development
+RUN npm install --production
 
 COPY ./.babelrc $APP_WORKDIR
 COPY ./webpack.config.js $APP_WORKDIR
