@@ -1,6 +1,7 @@
 import React from 'react';
 import { Query } from "react-apollo";
 import gql from "graphql-tag";
+import { Link } from "react-router-dom"
 
 const postQuery = gql`
 query PostQuery($cursor: Cursor = null) {
@@ -33,7 +34,7 @@ const Post = (props) => (
           <em className="mr-3">{props.node.personByAuthorId.fullName}</em> }
       { props.node.topic &&
           <span className="mr-3">({props.node.topic})</span> }
-      <button type="button" className="btn btn-primary btn-sm">Edit</button>
+      <Link to={`/edit/${props.node.id}`}>Edit</Link>
     </p>
     <p>{ props.node.summary }</p>
   </div>
