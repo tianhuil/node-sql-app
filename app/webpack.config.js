@@ -9,8 +9,10 @@ module.exports = (env, argv) => ({
   devServer: {
     contentBase: "./dist",
     port: process.env.APP_PORT || 80,
-    host: '0.0.0.0'
+    host: '0.0.0.0',
+    hot: true
   },
+  devtool: 'inline-source-map',
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'js/[name].js',
@@ -32,6 +34,8 @@ module.exports = (env, argv) => ({
     new webpack.EnvironmentPlugin([
       'API_HOST',
       'API_PORT'
-    ])
+    ]),
+    new webpack.NamedModulesPlugin(),
+    new webpack.HotModuleReplacementPlugin()
   ]
 })

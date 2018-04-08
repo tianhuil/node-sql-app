@@ -1,1 +1,1 @@
-npx webpack-dev-server --mode=development --inline --hot
+npx webpack-dev-server --mode=development --inline
