@@ -1,6 +1,7 @@
 import React from 'react';
 import { Query } from "react-apollo";
 import gql from "graphql-tag";
+import Post from "./Post";
 
 const postQuery = gql`
 query PostQuery($cursor: Cursor = null) {
@@ -72,17 +73,9 @@ const PostList = () => (
         <h1>Posts ({allPosts.totalCount})</h1>
         <ol>
         {
-          allPosts.edges.map(e =>
-            <li key={e.node.id}>
-              <h3>{e.node.headline}</h3>
-              <p>
-                { e.node.personByAuthorId.fullName &&
-                    <em>{e.node.personByAuthorId.fullName}</em> }
-                &nbsp;&nbsp;
-                { e.node.topic &&
-                    <span>({e.node.topic})</span> }
-              </p>
-              <p>{ e.node.summary }</p>
+          allPosts.edges.map(edge =>
+            <li key={edge.node.id}>
+              <Post node={edge.node} />
             </li>
           )
         }
