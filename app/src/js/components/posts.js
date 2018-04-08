@@ -25,10 +25,9 @@ query PostQuery($cursor: Cursor = null) {
 }
 `
 
-const PostPagination = (props) => {
-  const allPosts = props.allPosts
-  const pageInfo = allPosts.pageInfo
+const PostNextPage = (props) => {
   const fetchMore = props.fetchMore
+  const pageInfo = props.pageInfo
 
   const nextPageClick = (e) => {
     e.preventDefault();
@@ -55,14 +54,16 @@ const PostPagination = (props) => {
     })
   }
 
-  const nextPage = (pageInfo.hasNextPage) ? (
-    <button onClick={(e) => nextPageClick(e)} class="btn btn-primary">Next Page</button>
+  return (pageInfo.hasNextPage) ? (
+    <button onClick={(e) => nextPageClick(e)} className="btn btn-primary">Next Page</button>
   ) : (
-    <button onClick={(e) => nextPageClick(e)} class="btn btn-disabled">No More Pages</button>
+    <button onClick={(e) => nextPageClick(e)} className="btn btn-disabled">No More Pages</button>
   );
+}
 
-  console.log(pageInfo.hasNextPage)
-  console.log(pageInfo.endCursor)
+const PostPagination = (props) => {
+  const allPosts = props.allPosts
+  const pageInfo = allPosts.pageInfo
 
   return <div className="posts">
     <h1>Posts ({allPosts.totalCount})</h1>
@@ -83,7 +84,7 @@ const PostPagination = (props) => {
       )
     }
     </ol>
-    { nextPage }
+    <PostNextPage fetchMore={props.fetchMore} pageInfo={allPosts.pageInfo}/>
   </div>
 }
 

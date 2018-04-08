@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import PostList from "./components/post";
+import PostList from "./components/posts";
 import { ApolloProvider } from "react-apollo";
 
 import { newClient } from "./lib/apollo.js"
