@@ -60,41 +60,37 @@ const PostNextPage = (props) => {
   );
 }
 
-class PostList extends React.Component {
-  render() {
-    return (
-      <Query query={postQuery}>
-        {({ loading, error, data, fetchMore }) => {
-          if (loading) return <p>Loading...</p>;
-          if (error) return <p>Error :(</p>;
+const PostList = () => (
+  <Query query={postQuery}>
+    {({ loading, error, data, fetchMore }) => {
+      if (loading) return <p>Loading...</p>;
+      if (error) return <p>Error :(</p>;
 
-          const allPosts = data.allPosts
+      const allPosts = data.allPosts
 
-          return <div className="posts">
-            <h1>Posts ({allPosts.totalCount})</h1>
-            <ol>
-            {
-              allPosts.edges.map(e =>
-                <li key={e.node.id}>
-                  <h3>{e.node.headline}</h3>
-                  <p>
-                    { e.node.personByAuthorId.fullName &&
-                        <em>{e.node.personByAuthorId.fullName}</em> }
-                    &nbsp;&nbsp;
-                    { e.node.topic &&
-                        <span>({e.node.topic})</span> }
-                  </p>
-                  <p>{ e.node.summary }</p>
-                </li>
-              )
-            }
-            </ol>
-            <PostNextPage fetchMore={fetchMore} pageInfo={allPosts.pageInfo}/>
-          </div>
-        }}
-      </Query>
-    );
-  }
-}
+      return <div className="posts">
+        <h1>Posts ({allPosts.totalCount})</h1>
+        <ol>
+        {
+          allPosts.edges.map(e =>
+            <li key={e.node.id}>
+              <h3>{e.node.headline}</h3>
+              <p>
+                { e.node.personByAuthorId.fullName &&
+                    <em>{e.node.personByAuthorId.fullName}</em> }
+                &nbsp;&nbsp;
+                { e.node.topic &&
+                    <span>({e.node.topic})</span> }
+              </p>
+              <p>{ e.node.summary }</p>
+            </li>
+          )
+        }
+        </ol>
+        <PostNextPage fetchMore={fetchMore} pageInfo={allPosts.pageInfo}/>
+      </div>
+    }}
+  </Query>
+)
 
 export default PostList
