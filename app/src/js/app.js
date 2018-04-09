@@ -14,7 +14,7 @@ const App = () => (
     <BrowserRouter >
       <div>
         <Route exact path="/" component={PostList}/>
-        <Route path="/edit-:id" component={EditPost}/>
+        <Route path="/edit/:id" component={EditPost}/>
       </div>
     </BrowserRouter>
   </ApolloProvider>
