@@ -39,7 +39,7 @@ const EditPost = ({match}) => {
         </div>
         <div className="form-group">
           <label htmlFor="headline" className="form-text text-muted">Body</label>
-          <textarea className="form-control" id="body" rows="5" value={data.postById.body}>
+          <textarea className="form-control" id="body" rows="12" value={data.postById.body}>
           </textarea>
         </div>
       </form>
