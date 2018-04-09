@@ -34,7 +34,7 @@ const Post = (props) => (
           <em className="mr-3">{props.node.personByAuthorId.fullName}</em> }
       { props.node.topic &&
           <span className="mr-3">({props.node.topic})</span> }
-      <Link to={`/edit/${props.node.id}`}>Edit</Link>
+      <Link to={`/edit-${props.node.id}`}>Edit</Link>
     </p>
     <p>{ props.node.summary }</p>
   </div>

@@ -10,7 +10,8 @@ module.exports = (env, argv) => ({
     contentBase: "./dist",
     port: process.env.APP_PORT || 80,
     host: '0.0.0.0',
-    hot: true
+    hot: true,
+    historyApiFallback: true
   },
   devtool: 'inline-source-map',
   output: {
