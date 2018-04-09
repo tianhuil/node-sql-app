@@ -3,7 +3,7 @@ import { Query } from "react-apollo";
 import gql from "graphql-tag";
 import { Link } from "react-router-dom"
 
-const postQuery = gql`
+const PostQuery = gql`
 query PostQuery($cursor: Cursor = null) {
   allPosts(first: 5, after: $cursor) {
     totalCount
@@ -46,7 +46,7 @@ const PostNextPage = (props) => {
   const nextPageClick = (e) => {
     e.preventDefault();
     props.fetchMore({
-      query: postQuery,
+      query: PostQuery,
       variables: {
         cursor: props.pageInfo.endCursor
       },
@@ -76,7 +76,7 @@ const PostNextPage = (props) => {
 }
 
 const PostList = () => (
-  <Query query={postQuery}>
+  <Query query={PostQuery}>
     {({ loading, error, data, fetchMore }) => {
       if (loading) return <p>Loading...</p>;
       if (error) return <p>Error :(</p>;

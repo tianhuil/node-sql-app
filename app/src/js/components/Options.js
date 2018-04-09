@@ -13,7 +13,7 @@ const PostTopics = gql`
   }
 }
 `
-const Authors = gql`
+const QueryAuthors = gql`
 {
   allPeople {
     nodes {
@@ -37,7 +37,7 @@ const OptionsWithNull = (props) => (
 )
 
 const AuthorsOptions = (props) => (
-  <Query query={Authors}>
+  <Query query={QueryAuthors}>
     {({ loading, error, data }) => {
       if (loading) return <p>Loading...</p>;
       if (error) return <p>Error :(</p>;

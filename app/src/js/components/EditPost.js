@@ -3,7 +3,7 @@ import { Query } from "react-apollo";
 import gql from "graphql-tag";
 import { PostTopicsOptions, AuthorsOptions } from "./Options"
 
-const query = gql`
+const QueryPost = gql`
 query Query($id: Int!) {
   postById(id: $id) {
     id
@@ -19,7 +19,7 @@ query Query($id: Int!) {
 `
 
 const EditPost = ({match}) => {
-  return <Query query={query} variables={{ id: parseInt(match.params.id) }} >
+  return <Query query={QueryPost} variables={{ id: parseInt(match.params.id) }} >
     {({ loading, error, data }) => {
       if (loading) return <p>Loading...</p>;
       if (error) return <p>Error :(</p>;
