@@ -26,7 +26,7 @@ const Authors = gql`
 
 const OptionsWithNull = (props) => (
   <div className="form-group">
-    <label htmlFor={props.id} className="form-text text-muted">{props.name}</label>
+    <label htmlFor={props.id}>{props.name}</label>
     <select className="form-control" value={props.select ? props.select : "null"} id={props.id}>
       {
         props.options.map(o => <option key={o.value} value={o.value}>{o.name}</option>)

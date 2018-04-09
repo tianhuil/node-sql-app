@@ -26,7 +26,7 @@ const EditPost = ({match}) => {
 
       return <form>
         <div className="form-group">
-          <label htmlFor="headline" className="form-text text-muted">Headline</label>
+          <label htmlFor="headline">Headline</label>
           <input type="text" className="form-control" id="headline" aria-describedby="emailHelp" value={data.postById.headline} />
         </div>
         <div className="row">
@@ -38,7 +38,7 @@ const EditPost = ({match}) => {
           </div>
         </div>
         <div className="form-group">
-          <label htmlFor="headline" className="form-text text-muted">Body</label>
+          <label htmlFor="headline">Body</label>
           <textarea className="form-control" id="body" rows="12" value={data.postById.body}>
           </textarea>
         </div>
