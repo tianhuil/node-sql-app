@@ -23,16 +23,22 @@ const EditPost = ({match}) => {
       if (loading) return <p>Loading...</p>;
       if (error) return <p>Error :(</p>;
 
-      return <div>
-        <h2> {data.postById.headline} </h2>
+      return <form>
+        <div class="form-group">
+          <label for="headline" className="form-text text-muted">Headline</label>
+          <input type="text" class="form-control" id="headline" aria-describedby="emailHelp" value={data.postById.headline} />
+        </div>
         <p>
           <em> {data.postById.personByAuthorId.fullName} </em>
           {data.postById.topic}
         </p>
-        <p>
-          {data.postById.body}
-        </p>
-      </div>
+        <div class="form-group">
+          <label for="headline" className="form-text text-muted">Body</label>
+          <textarea className="form-control" id="body" rows="5">
+            {data.postById.body}
+          </textarea>
+        </div>
+      </form>
     }}
   </Query>
 }
