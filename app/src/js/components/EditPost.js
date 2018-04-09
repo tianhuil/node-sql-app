@@ -34,9 +34,9 @@ const OptionsWithNull = (props) => (
     <label htmlFor={props.id} className="form-text text-muted">{props.name}</label>
     <select className="form-control" value={props.select ? props.select : "null"} id={props.id}>
       {
-        props.options.map(o => <option key={o} value={o}>{o}</option>)
+        props.options.map(o => <option key={o.value} value={o.value}>{o.name}</option>)
       }
-      <option key="null" value="null">null</option>
+      <option key="null" value="null">Null</option>
     </select>
   </div>
 )
@@ -46,13 +46,43 @@ const PostTopicsOptions = (props) => (
     {({ loading, error, data }) => {
       if (loading) return <p>Loading...</p>;
       if (error) return <p>Error :(</p>;
-      console.log(props.select)
 
       return <OptionsWithNull
         id="topic"
         name="Post Topics"
         select={props.select}
-        options={data.__type.enumValues.map(v => v.name)}
+        options={data.__type.enumValues.map(
+          v => ({value: v.name, name: v.name})
+        )}
+      />
+    }}
+  </Query>
+)
+
+const Authors = gql`
+{
+  allPeople {
+    nodes {
+      id
+      fullName
+    }
+  }
+}
+`
+
+const AuthorsOptions = (props) => (
+  <Query query={Authors}>
+    {({ loading, error, data }) => {
+      if (loading) return <p>Loading...</p>;
+      if (error) return <p>Error :(</p>;
+
+      return <OptionsWithNull
+        id="author"
+        name="Authors"
+        select={props.select}
+        options={data.allPeople.nodes.map(
+          n => ({value: n.id, name: n.fullName ? n.fullName : `(id: ${n.id})`})
+        )}
       />
     }}
   </Query>
@@ -71,7 +101,7 @@ const EditPost = ({match}) => {
         </div>
         <div className="row">
           <div className="col-6">
-            <em> {data.postById.personByAuthorId.fullName} </em>
+            <AuthorsOptions select={data.postById.personByAuthorId.id}/>
           </div>
           <div className="col-6">
             <PostTopicsOptions select={data.postById.topic}/>
