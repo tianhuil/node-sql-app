@@ -1,4 +1,5 @@
 import React from 'react'
+import { Select } from 'react-form'
 import { Query, Mutation } from "react-apollo"
 import gql from "graphql-tag"
 
@@ -23,19 +24,14 @@ query QueryAuthors {
   }
 }`
 
-
-const OptionsWithNull = (props) => (
+const OptionsWith = (props) => (
   <div className="form-group">
-    <label htmlFor={props.id}>{props.name}</label>
-    <select className="form-control"
-      value={props.select ? props.select : "null"}
-      id={props.id} ref={props.inputRef}
-    >
-      {props.options.map(o =>
-        <option key={o.value} value={o.value}>{o.name}</option>
-      )}
-      <option key="null" value="null">Null</option>
-    </select>
+    <label htmlFor={props.id}>{props.field}</label>
+    <Select className="form-control"
+      defaultValue={props.defaultValue}
+      id={props.id} field={props.field}
+      options={props.options}
+    />
   </div>
 )
 
@@ -45,17 +41,15 @@ const AuthorsOptions = (props) => (
       if (loading) return <p>Loading...</p>
       if (error) return <p>Error :(</p>
 
-      return <OptionsWithNull
-        id="author"
-        name="Authors"
-        select={props.select}
+      return <OptionsWith
+        id="authorId" field="authorId"
+        defaultValue={props.defaultValue}
         options={data.allPeople.nodes.map(
           n => ({
             value: n.id,
-            name: n.fullName ? n.fullName : `(id: ${n.id})`
+            label: n.fullName ? n.fullName : `(id: ${n.id})`
           })
         )}
-        inputRef={props.authorIdInput}
       />
     }}
   </Query>
@@ -67,18 +61,15 @@ const TopicsOptions = (props) => (
       if (loading) return <p>Loading...</p>
       if (error) return <p>Error :(</p>
 
-      return <OptionsWithNull
-        id="topic"
-        name="Post Topics"
-        select={props.select}
+      return <OptionsWith
+        id="topic" field="topic"
+        defaultValue={props.defaultValue}
         options={data.__type.enumValues.map(
-          v => ({value: v.name, name: v.name})
+          v => ({value: v.name, label: v.name})
         )}
-        inputRef={props.topicInput}
       />
     }}
   </Query>
 )
 
 export { TopicsOptions, AuthorsOptions }
-
