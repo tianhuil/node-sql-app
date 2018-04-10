@@ -42,13 +42,16 @@ const EditPost = ({match}) => {
 
       return <Mutation mutation={UpdatePost}>
         {updatePost => {
-          const updatePost2 = (submittedValues) => {
-            updatePost({variables: { input: {
-              id: match.params.id,
-              postPatch: submittedValues
-            }}})
-          }
-          return <Form onSubmit={submittedValues => updatePost2(submittedValues)}>
+          return <Form onSubmit={(submittedValues) =>
+            updatePost({
+              variables: {
+                input: {
+                  id: match.params.id,
+                  postPatch: submittedValues
+                }
+              }
+            })
+          }>
             { formApi => (
               <form onSubmit={formApi.submitForm}>
                 <div className="form-group">
