@@ -15,7 +15,7 @@ query PostQuery($cursor: Cursor = null) {
         }
         topic
         headline
-        summary(length: 200, omission: "Not Available")
+        summary(length: 200)
       }
     }
     pageInfo {
