@@ -1,6 +1,6 @@
-import React from 'react';
-import { Query } from "react-apollo";
-import gql from "graphql-tag";
+import React from 'react'
+import { Query } from "react-apollo"
+import gql from "graphql-tag"
 import { Link } from "react-router-dom"
 
 const PostQuery = gql`
@@ -23,8 +23,7 @@ query PostQuery($cursor: Cursor = null) {
       hasNextPage
     }
   }
-}
-`
+}`
 
 const Post = (props) => (
   <div>
@@ -44,15 +43,15 @@ const PostNextPage = (props) => {
   const pageInfo = props.pageInfo
 
   const nextPageClick = (e) => {
-    e.preventDefault();
+    e.preventDefault()
     props.fetchMore({
       query: PostQuery,
       variables: {
         cursor: props.pageInfo.endCursor
       },
       updateQuery: (previousResult, { fetchMoreResult }) => {
-        const newEdges = fetchMoreResult.allPosts.edges;
-        const pageInfo = fetchMoreResult.allPosts.pageInfo;
+        const newEdges = fetchMoreResult.allPosts.edges
+        const pageInfo = fetchMoreResult.allPosts.pageInfo
 
         return newEdges.length
           ? {
@@ -63,7 +62,7 @@ const PostNextPage = (props) => {
                 pageInfo
               }
             }
-          : previousResult;
+          : previousResult
       }
     })
   }
@@ -72,14 +71,14 @@ const PostNextPage = (props) => {
     <button onClick={(e) => nextPageClick(e)} className="btn btn-primary">Next Page</button>
   ) : (
     <button onClick={(e) => nextPageClick(e)} className="btn btn-disabled">No More Pages</button>
-  );
+  )
 }
 
 const PostList = () => (
   <Query query={PostQuery}>
     {({ loading, error, data, fetchMore }) => {
-      if (loading) return <p>Loading...</p>;
-      if (error) return <p>Error :(</p>;
+      if (loading) return <p>Loading...</p>
+      if (error) return <p>Error :(</p>
 
       const allPosts = data.allPosts
 
