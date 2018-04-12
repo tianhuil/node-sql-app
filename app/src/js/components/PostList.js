@@ -70,7 +70,7 @@ const PostNextPage = (props) => {
   return (pageInfo.hasNextPage) ? (
     <button onClick={(e) => nextPageClick(e)} className="btn btn-primary">Next Page</button>
   ) : (
-    <button onClick={(e) => nextPageClick(e)} className="btn btn-disabled">No More Pages</button>
+    <button className="btn btn-disabled">No More Pages</button>
   )
 }
 
