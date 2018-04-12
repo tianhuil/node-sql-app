@@ -26,7 +26,7 @@ query PostQuery($cursor: Cursor = null) {
 }`
 
 const Post = (props) => (
-  <div>
+  <React.Fragment>
     <h3>{props.node.headline}</h3>
     <p>
       { props.node.personByAuthorId.fullName &&
@@ -36,7 +36,7 @@ const Post = (props) => (
       <Link to={`/edit/${props.node.id}`}>Edit</Link>
     </p>
     <p>{ props.node.summary }</p>
-  </div>
+  </React.Fragment>
 )
 
 const PostNextPage = (props) => {
@@ -82,7 +82,7 @@ const PostList = () => (
 
       const allPosts = data.allPosts
 
-      return <div className="posts">
+      return <React.Fragment>
         <h1>Posts ({allPosts.totalCount})</h1>
         <ol>
         {
@@ -94,7 +94,7 @@ const PostList = () => (
         }
         </ol>
         <PostNextPage fetchMore={fetchMore} pageInfo={allPosts.pageInfo}/>
-      </div>
+      </React.Fragment>
     }}
   </Query>
 )

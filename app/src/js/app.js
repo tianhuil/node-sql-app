@@ -12,10 +12,10 @@ const client = newClient()
 const App = () => (
   <ApolloProvider client={client}>
     <BrowserRouter >
-      <div>
+      <React.Fragment>
         <Route exact path="/" component={PostList}/>
         <Route path="/edit/:id" component={EditPost}/>
-      </div>
+      </React.Fragment>
     </BrowserRouter>
   </ApolloProvider>
 );
