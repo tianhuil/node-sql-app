@@ -4,7 +4,7 @@ import queryString from 'query-string'
 
 const Login = (props) => (
   <div className="dropdown navbar-nav">
-    <button className="btn btn-transparent btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <button className="btn btn-transparent btn-primary" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
       Login
     </button>
     <form className="dropdown-menu dropdown-menu-right p-4" style={{width: "320pt"}}>
@@ -25,17 +25,12 @@ class Search extends React.Component {
   constructor(props) {
     super(props)
     this.state = {value: ''};
-    this.handleChange = this.handleChange.bind(this)
-  }
-
-  handleChange(event) {
-    this.setState({value: event.target.value});
   }
 
   render() {
     return <form className="form-inline my-2 my-lg-0">
       <input
-        value={this.state.value} onChange={this.handleChange}
+        value={this.state.value} onChange={e => this.setState({value: e.target.value})}
         className="form-control mr-sm-2" type="search"
         placeholder="Search" aria-label="Search" />
       <Link to={`search?${queryString.stringify({q: this.state.value})}`}>
