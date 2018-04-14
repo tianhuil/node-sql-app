@@ -12,5 +12,6 @@ RUN npm install --development
 COPY ./.babelrc $APP_WORKDIR
 COPY ./webpack.config.js $APP_WORKDIR
 COPY ./src $APP_WORKDIR/src
+COPY ./build $APP_WORKDIR/build
 
 CMD ["sh", "build/dev.sh"]
