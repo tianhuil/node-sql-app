@@ -2,10 +2,11 @@ import React from 'react'
 import { Query } from "react-apollo"
 import gql from "graphql-tag"
 import { Link } from "react-router-dom"
+import queryString from 'query-string'
 
-const PostQuery = gql`
-query PostQuery($cursor: Cursor = null) {
-  allPosts(first: 5, after: $cursor) {
+const SearchPosts = gql`
+query SearchPosts($search: String, $cursor: Cursor = null) {
+  searchPosts(search: $search, first: 5, after: $cursor) {
     totalCount
     edges {
       node {
@@ -45,20 +46,21 @@ const PostNextPage = (props) => {
   const nextPageClick = (e) => {
     e.preventDefault()
     props.fetchMore({
-      query: PostQuery,
+      query: SearchPosts,
       variables: {
-        cursor: props.pageInfo.endCursor
+        cursor: props.pageInfo.endCursor,
+        search: props.search
       },
       updateQuery: (previousResult, { fetchMoreResult }) => {
-        const newEdges = fetchMoreResult.allPosts.edges
-        const pageInfo = fetchMoreResult.allPosts.pageInfo
+        const newEdges = fetchMoreResult.searchPosts.edges
+        const pageInfo = fetchMoreResult.searchPosts.pageInfo
 
         return newEdges.length
           ? {
-              allPosts: {
-                totalCount: previousResult.allPosts.totalCount,
-                __typename: previousResult.allPosts.__typename,
-                edges: [...previousResult.allPosts.edges, ...newEdges],
+              searchPosts: {
+                totalCount: previousResult.searchPosts.totalCount,
+                __typename: previousResult.searchPosts.__typename,
+                edges: [...previousResult.searchPosts.edges, ...newEdges],
                 pageInfo
               }
             }
@@ -74,29 +76,35 @@ const PostNextPage = (props) => {
   )
 }
 
-const PostList = () => (
-  <Query query={PostQuery}>
+const PostList = (props) => {
+  const search = queryString.parse(props.location.search).q || ""
+
+  return <Query query={SearchPosts} variables={{search: search}}>
     {({ loading, error, data, fetchMore }) => {
       if (loading) return <p>Loading...</p>
       if (error) return <p>Error :(</p>
 
-      const allPosts = data.allPosts
+      const searchPosts = data.searchPosts
 
       return <React.Fragment>
-        <h1>Posts ({allPosts.totalCount})</h1>
+        <h1 className="mb-3">Posts ({searchPosts.totalCount})</h1>
         <ol>
         {
-          allPosts.edges.map(edge =>
+          searchPosts.edges.map(edge =>
             <li key={edge.node.id}>
               <Post node={edge.node} />
             </li>
           )
         }
         </ol>
-        <PostNextPage fetchMore={fetchMore} pageInfo={allPosts.pageInfo}/>
+        <PostNextPage
+          fetchMore={fetchMore}
+          pageInfo={searchPosts.pageInfo}
+          search={search}
+        />
       </React.Fragment>
     }}
   </Query>
-)
+}
 
 export default PostList
