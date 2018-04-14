@@ -16,10 +16,7 @@ const authLink = setContext((_, { headers }) => {
   const jwtToken = getToken()
   // return the headers to the context so httpLink can read them
   return jwtToken ? {
-    headers: Object.assign({},
-      headers,
-      {authorization: `Bearer ${jwtToken}`}
-    )
+    headers: {...headers, authorization: `Bearer ${jwtToken}`}
   } : headers
 })
 
