@@ -13,8 +13,10 @@ const App = () => (
   <ApolloProvider client={client}>
     <BrowserRouter >
       <React.Fragment>
-        <Route exact path="/" component={PostList}/>
-        <Route path="/edit/:id" component={EditPost}/>
+        <div className="container my-5">
+          <Route exact path="/" component={PostList}/>
+          <Route path="/edit/:id" component={EditPost}/>
+        </div>
       </React.Fragment>
     </BrowserRouter>
   </ApolloProvider>
