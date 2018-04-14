@@ -1,7 +1,16 @@
-ARG APP_TAG_PROD
-FROM $APP_TAG_PROD
+FROM mhart/alpine-node:9
+# get rid of annoying warning
+RUN npm install -g npm@5.8.0
+
+ARG APP_WORKDIR
+WORKDIR $APP_WORKDIR
+COPY package*.json $APP_WORKDIR/
 
 # Need build dependencies
 RUN npm install --development
+
+COPY ./.babelrc $APP_WORKDIR
+COPY ./webpack.config.js $APP_WORKDIR
+COPY ./src $APP_WORKDIR/src
 
 CMD ["sh", "build/dev.sh"]

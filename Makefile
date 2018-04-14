@@ -89,12 +89,12 @@ app-prod:
 		--build-arg APP_WORKDIR=$(APP_WORKDIR) \
 		app/.
 
-app-dev: app-prod
+app-dev:
 	-docker rm -f $(APP_NAME)
 
 	docker build -t $(APP_TAG_DEV) \
 		-f ./app/Dockerfile.Dev \
-		--build-arg APP_TAG_PROD=$(APP_TAG_PROD) \
+		--build-arg APP_WORKDIR=$(APP_WORKDIR) \
 		app/.
 
 	# Note that the local volume mount path must be absolute
