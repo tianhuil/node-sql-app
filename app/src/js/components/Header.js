@@ -1,30 +1,88 @@
 import React from 'react'
+import gql from "graphql-tag"
+import { Mutation } from "react-apollo"
 import { Redirect, Link } from 'react-router-dom'
 import queryString from 'query-string'
 
-const Login = (props) => (
-  <div className="dropdown navbar-nav">
-    <button className="btn btn-transparent btn-primary" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-      Login
-    </button>
-    <form className="dropdown-menu dropdown-menu-right p-4" style={{width: "320pt"}}>
-      <div className="form-group">
-        <label htmlFor="email">Email</label>
-        <input type="email" className="form-control" id="exampleDropdownFormEmail2" placeholder="email@example.com" />
-      </div>
-      <div className="form-group">
-        <label htmlFor="password">Password</label>
-        <input type="password" className="form-control" id="password" placeholder="Password" />
-      </div>
-      <button type="submit" className="btn btn-primary">Sign in</button>
-    </form>
-  </div>
-)
+const Authenticate = gql`
+mutation Authenticate {
+  authenticate(input: {email: "spowell0@noaa.gov", password:"iFbWWlc"}) {
+    jwtToken
+  }
+}`
+
+class Login extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      email: '',
+      password: ''
+    }
+  }
+
+  render() {
+    return <Mutation mutation={Authenticate}>
+      {authenticate => (
+        <div className="dropdown navbar-nav">
+          <button
+            className="btn btn-transparent btn-primary"
+            type="button"
+            id="dropdownMenuButton"
+            data-toggle="dropdown"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >
+            Login
+          </button>
+          <form
+            className="dropdown-menu dropdown-menu-right p-4"
+            style={{width: "320pt"}}
+            onSubmit={e => {
+              e.preventDefault()
+              authenticate({variables:
+                {
+                  email: this.state.email,
+                  password: this.state.password
+                }
+              }).then(response =>
+                localStorage.setItem('jwtToken', response.data.authenticate.jwtToken)
+              )
+              this.state.email = ''
+              this.state.password = ''
+              $("#dropdownMenuButton").dropdown('toggle')
+            }}
+          >
+            <div className="form-group">
+              <p>spowell0@noaa.gov, iFbWWlc</p>
+              <label htmlFor="email">Email</label>
+              <input
+                value={this.state.email}
+                onChange={e => this.setState({email: e.target.value})}
+                type="email" className="form-control"
+                id="exampleDropdownFormEmail2" placeholder="email@example.com"
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="password">Password</label>
+              <input
+                value={this.state.password}
+                onChange={e => this.setState({password: e.target.value})}
+                type="password" className="form-control"
+                id="password" placeholder="Password"
+              />
+            </div>
+            <button type="submit" className="btn btn-primary">Sign in</button>
+          </form>
+        </div>
+      )}
+    </Mutation>
+  }
+}
 
 class Search extends React.Component {
   constructor(props) {
     super(props)
-    this.state = {value: ''};
+    this.state = {value: ''}
   }
 
   render() {
