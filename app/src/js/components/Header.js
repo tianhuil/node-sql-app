@@ -7,9 +7,9 @@ const Login = (props) => (
     <button className="btn btn-transparent btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
       Login
     </button>
-    <form className="dropdown-menu dropdown-menu-right p-4">
+    <form className="dropdown-menu dropdown-menu-right p-4" style={{width: "320pt"}}>
       <div className="form-group">
-        <label htmlFor="email">Email address</label>
+        <label htmlFor="email">Email</label>
         <input type="email" className="form-control" id="exampleDropdownFormEmail2" placeholder="email@example.com" />
       </div>
       <div className="form-group">
