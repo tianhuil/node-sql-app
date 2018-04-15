@@ -7,8 +7,8 @@ import queryString from 'query-string'
 import { setToken, getToken } from '../lib/token'
 
 const Authenticate = gql`
-mutation Authenticate {
-  authenticate(input: {email: "spowell0@noaa.gov", password:"iFbWWlc"}) {
+mutation Authenticate($input: AuthenticateInput!) {
+  authenticate(input: $input) {
     jwtToken
   }
 }`
@@ -61,8 +61,10 @@ class Login extends React.Component {
               e.preventDefault()
               authenticate({variables:
                 {
-                  email: this.state.email,
-                  password: this.state.password
+                  input: {
+                    email: this.state.email,
+                    password: this.state.password
+                  }
                 }
               }).then(this.handleAuthenticate)
             }}
