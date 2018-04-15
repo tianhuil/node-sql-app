@@ -21,6 +21,25 @@ query {
   }
 }`
 
+class Search extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {value: ''}
+  }
+
+  render() {
+    return <form className="form-inline my-2 my-lg-0">
+      <input
+        value={this.state.value} onChange={e => this.setState({value: e.target.value})}
+        className="form-control mr-sm-2" type="search"
+        placeholder="Search" aria-label="Search" />
+      <Link to={`search?${queryString.stringify({q: this.state.value})}`}>
+        <button className="btn btn-primary my-2 my-sm-0" type="submit">Search</button>
+      </Link>
+    </form>
+  }
+}
+
 class Login extends React.Component {
   constructor(props) {
     super(props)
@@ -100,56 +119,46 @@ class Login extends React.Component {
   }
 }
 
-class Search extends React.Component {
+class Logout extends React.Component {
   constructor(props) {
     super(props)
-    this.state = {value: ''}
+    this.handleLogout = this.handleLogout.bind(this)
+  }
+
+  handleLogout() {
+    setToken("")
+    client.resetStore()
+    client.cache.reset()
+    this.props.toggleLogin()
   }
 
   render() {
-    return <form className="form-inline my-2 my-lg-0">
-      <input
-        value={this.state.value} onChange={e => this.setState({value: e.target.value})}
-        className="form-control mr-sm-2" type="search"
-        placeholder="Search" aria-label="Search" />
-      <Link to={`search?${queryString.stringify({q: this.state.value})}`}>
-        <button className="btn btn-primary my-2 my-sm-0" type="submit">Search</button>
-      </Link>
-    </form>
+    return <Query query={ProfileQuery}>
+      {({ loading, error, data, client }) => {
+        if (loading) return <p>Loading...</p>
+        if (error) return <p>Error :(</p>
+
+        return <div className="dropdown navbar-nav">
+          <button
+            className="btn btn-transparent btn-primary dropdown-toggle"
+            type="button"
+            id="dropdownMenuButton"
+            data-toggle="dropdown"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >
+            Logout
+          </button>
+          <div className="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+            <h6 className="dropdown-header">{data.currentPerson.fullName}</h6>
+            <Link className="dropdown-item" to="/profile">Profile</Link>
+            <Link className="dropdown-item" to="#" onClick={this.handleLogout}>Logout</Link>
+          </div>
+        </div>
+      }}
+    </Query>
   }
 }
-
-const Logout = (props) => (
-  <Query query={ProfileQuery}>
-  {({ loading, error, data, client }) => {
-    if (loading) return <p>Loading...</p>
-    if (error) return <p>Error :(</p>
-
-    return <div className="dropdown navbar-nav">
-      <button
-        className="btn btn-transparent btn-primary dropdown-toggle"
-        type="button"
-        id="dropdownMenuButton"
-        data-toggle="dropdown"
-        aria-haspopup="true"
-        aria-expanded="false"
-      >
-        Logout
-      </button>
-      <div className="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-        <h6 className="dropdown-header">{data.currentPerson.fullName}</h6>
-        <Link className="dropdown-item" to="/profile">Profile</Link>
-        <Link className="dropdown-item" to="#" onClick={() => {
-          setToken("")
-          client.resetStore()
-          client.cache.reset()
-          props.toggleLogin()
-        }}>Logout</Link>
-      </div>
-    </div>
-  }}
-  </Query>
-)
 
 class Header extends React.Component {
   constructor(props) {
