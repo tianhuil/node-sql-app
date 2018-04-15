@@ -28,15 +28,19 @@ class Login extends React.Component {
       email: '',
       password: ''
     }
-    this.handleAuthenticate = this.handleAuthenticate.bind(this)
+    this.handleLogin = this.handleLogin.bind(this)
   }
 
-  handleAuthenticate(response) {
-    setToken(response.data.authenticate.jwtToken)
-    this.state.email = ''
-    this.state.password = ''
-    $("#dropdownMenuButton").dropdown('toggle')
-    this.props.toggleLogin()
+  handleLogin(response) {
+    const jwtToken = response.data.authenticate.jwtToken
+
+    if (jwtToken) {
+      setToken()
+      this.state.email = ''
+      this.state.password = ''
+      $("#dropdownMenuButton").dropdown('toggle')
+      this.props.toggleLogin()
+    }
   }
 
   render() {
@@ -66,7 +70,7 @@ class Login extends React.Component {
                     password: this.state.password
                   }
                 }
-              }).then(this.handleAuthenticate)
+              }).then(this.handleLogin)
             }}
           >
             <div className="form-group">
