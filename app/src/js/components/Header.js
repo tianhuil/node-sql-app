@@ -4,20 +4,12 @@ import { Query, Mutation } from "react-apollo"
 import { Redirect, Link } from 'react-router-dom'
 import queryString from 'query-string'
 
-import { setToken, getToken } from '../lib/token'
+import { setToken, getToken, ProfileQuery } from '../lib/profile'
 
 const Authenticate = gql`
 mutation Authenticate($input: AuthenticateInput!) {
   authenticate(input: $input) {
     jwtToken
-  }
-}`
-
-const ProfileQuery = gql`
-query {
-  currentPerson {
-    id
-    fullName
   }
 }`
 
@@ -54,7 +46,7 @@ class Login extends React.Component {
     const jwtToken = response.data.authenticate.jwtToken
 
     if (jwtToken) {
-      setToken()
+      setToken(jwtToken)
       this.state.email = ''
       this.state.password = ''
       $("#dropdownMenuButton").dropdown('toggle')
@@ -133,7 +125,7 @@ class Logout extends React.Component {
   }
 
   render() {
-    return <Query query={ProfileQuery}>
+    return <ProfileQuery>
       {({ loading, error, data, client }) => {
         if (loading) return <p>Loading...</p>
         if (error) return <p>Error :(</p>
@@ -156,7 +148,7 @@ class Logout extends React.Component {
           </div>
         </div>
       }}
-    </Query>
+    </ProfileQuery>
   }
 }
 
