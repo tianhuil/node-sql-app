@@ -83,7 +83,7 @@ const EditPost = ({match}) => {
                   />
                 </div>
                 <button type="submit" className="btn btn-primary">
-                  Submit
+                  Save
                 </button>
               </form>
             )}

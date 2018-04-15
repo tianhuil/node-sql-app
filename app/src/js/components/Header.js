@@ -158,7 +158,7 @@ class Header extends React.Component {
 
   render() {
     return <nav className="navbar navbar-expand-md navbar-dark bg-primary">
-      <a className="navbar-brand mr-auto " href="#">Post Website</a>
+      <a className="navbar-brand mr-auto " href="/">Post Website</a>
       <Search redirect={false} />
       { this.state.isLoggedIn ?
         <Logout toggleLogin={this.toggleLogin} /> :
