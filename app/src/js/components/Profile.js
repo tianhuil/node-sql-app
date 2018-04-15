@@ -113,7 +113,7 @@ const EditProfile = (props) => (
             <label htmlFor="createdAt">First Name</label>
             <input className="form-control"
               id="createdAt"
-              value={props.currentPerson.createdAt}
+              value={new Date(props.currentPerson.createdAt)}
               disabled
             />
           </div>
