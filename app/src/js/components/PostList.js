@@ -19,6 +19,7 @@ query SearchPosts($search: String, $cursor: Cursor = null) {
         }
         topic
         headline
+        createdAt
         summary(length: 200)
       }
     }
@@ -37,6 +38,8 @@ const Post = (props) => (
           <em className="mr-3">{props.node.personByAuthorId.fullName}</em> }
       { props.node.topic &&
           <span className="mr-3">({props.node.topic})</span> }
+      { props.node.createdAt &&
+          <span className="mr-3">Written {(new Date(props.node.createdAt)).toString()}</span> }
       {
         <ProfileQuery>
         {({data}) => {

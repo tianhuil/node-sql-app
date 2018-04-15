@@ -19,6 +19,7 @@ query {
         topic
         headline
         summary(length: 200)
+        createdAt
       }
       totalCount
     }
@@ -40,6 +41,7 @@ mutation UpdatePersonById($input: UpdatePersonByIdInput!) {
           topic
           headline
           summary(length: 200)
+          createdAt
         }
         totalCount
       }
@@ -68,6 +70,8 @@ const SmallPostList = (props) => (
           <h3>{node.headline}</h3>
           { node.topic &&
             <span className="mr-3">({node.topic})</span> }
+          { node.createdAt &&
+            <span className="mr-3">Written {(new Date(node.createdAt)).toString()}</span> }
           <Link to={`/edit/${node.id}`}>Edit</Link>
           <p>{ node.summary }</p>
         </li>
