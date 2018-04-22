@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import { ApolloProvider } from "react-apollo";
 import { BrowserRouter, Route } from 'react-router-dom'
 import client from "./lib/apollo.js"
+import { UserProvider } from "./lib/user.js"
 
 import PostList from "./components/PostList";
 import EditPost from "./components/EditPost"
@@ -12,7 +13,7 @@ import Profile from "./components/Profile"
 const App = () => (
   <ApolloProvider client={client}>
     <BrowserRouter >
-      <React.Fragment>
+      <UserProvider>
         <Header/>
         <div className="container my-5">
           <Route exact path="/" component={PostList}/>
@@ -20,7 +21,7 @@ const App = () => (
           <Route path="/profile" component={Profile}/>
           <Route path="/edit/:id" component={EditPost}/>
         </div>
-      </React.Fragment>
+      </UserProvider>
     </BrowserRouter>
   </ApolloProvider>
 );

@@ -4,7 +4,7 @@ import gql from "graphql-tag"
 import { Link } from "react-router-dom"
 import queryString from 'query-string'
 
-import { ProfileQuery } from '../lib/profile'
+import { UserConsumer } from '../lib/user'
 
 const SearchPosts = gql`
 query SearchPosts($search: String, $cursor: Cursor = null) {
@@ -40,17 +40,15 @@ const Post = (props) => (
           <span className="mr-3">({props.node.topic})</span> }
       { props.node.createdAt &&
           <span className="mr-3">Written {(new Date(props.node.createdAt)).toString()}</span> }
-      { <ProfileQuery>
-        {({ loading, error, data }) => {
-          if (loading || error || !data || !data.currentPerson) {
-            return null
-          } else if (data.currentPerson.id == props.node.personByAuthorId.id) {
+      { <UserConsumer>
+        {({ user }) => {
+          if (user && user.id == props.node.personByAuthorId.id) {
             return <Link to={`/edit/${props.node.id}`}>Edit</Link>
           } else {
             return null
           }
         }}
-      </ProfileQuery> }
+      </UserConsumer> }
     </p>
     <p>{ props.node.summary }</p>
   </React.Fragment>

@@ -2,7 +2,7 @@ import { ApolloClient } from 'apollo-client'
 import { createHttpLink } from 'apollo-link-http'
 import { setContext } from 'apollo-link-context'
 import { InMemoryCache } from 'apollo-cache-inmemory'
-import { getToken } from './profile'
+import { getToken } from './user'
 
 const API_HOST = process.env.API_HOST,
       API_PORT = process.env.API_PORT
