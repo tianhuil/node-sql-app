@@ -4,7 +4,7 @@ import { Query, Mutation } from "react-apollo"
 import { Redirect, Link } from 'react-router-dom'
 import queryString from 'query-string'
 
-import { setToken, getToken, ProfileQuery } from '../lib/profile'
+import { setToken, getToken, clearToken, ProfileQuery } from '../lib/profile'
 
 const Authenticate = gql`
 mutation Authenticate($input: AuthenticateInput!) {
@@ -118,37 +118,29 @@ class Logout extends React.Component {
   }
 
   handleLogout() {
-    setToken("")
-    client.resetStore()
-    client.cache.reset()
-    this.props.toggleLogin()
+    clearToken()
+    props.client.resetStore()
+    props.client.cache.reset()
   }
 
   render() {
-    return <ProfileQuery>
-      {({ loading, error, data, client }) => {
-        if (loading) return <p>Loading...</p>
-        if (error) return <p>Error :(</p>
-
-        return <div className="dropdown navbar-nav">
-          <button
-            className="btn btn-transparent btn-primary dropdown-toggle"
-            type="button"
-            id="dropdownMenuButton"
-            data-toggle="dropdown"
-            aria-haspopup="true"
-            aria-expanded="false"
-          >
-            Logout
-          </button>
-          <div className="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-            <h6 className="dropdown-header">{data.currentPerson.fullName}</h6>
-            <Link className="dropdown-item" to="/profile">Profile</Link>
-            <Link className="dropdown-item" to="#" onClick={this.handleLogout}>Logout</Link>
-          </div>
-        </div>
-      }}
-    </ProfileQuery>
+    return <div className="dropdown navbar-nav">
+      <button
+        className="btn btn-transparent btn-primary dropdown-toggle"
+        type="button"
+        id="dropdownMenuButton"
+        data-toggle="dropdown"
+        aria-haspopup="true"
+        aria-expanded="false"
+      >
+        Logout
+      </button>
+      <div className="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+        <h6 className="dropdown-header">{props.currentPerson.fullName}</h6>
+        <Link className="dropdown-item" to="/profile">Profile</Link>
+        <Link className="dropdown-item" to="#" onClick={this.handleLogout}>Logout</Link>
+      </div>
+    </div>
   }
 }
 
@@ -156,21 +148,19 @@ class Header extends React.Component {
   constructor(props) {
     super(props)
     this.state = {isLoggedIn: getToken() ? true : false}
-    this.toggleLogin = this.toggleLogin.bind(this)
-  }
-
-  toggleLogin() {
-    this.setState({isLoggedIn: !this.state.isLoggedIn})
   }
 
   render() {
     return <nav className="navbar navbar-expand-md navbar-dark bg-primary">
       <a className="navbar-brand mr-auto " href="/">Post Website</a>
       <Search redirect={false} />
-      { this.state.isLoggedIn ?
-        <Logout toggleLogin={this.toggleLogin} /> :
-        <Login toggleLogin={this.toggleLogin} />
-      }
+      <ProfileQuery>
+        {({ loading, error, data, client }) => (error || loading ?
+          <Login /> :
+          <Logout currentPerson={data.currentPerson}
+                  client={client}/>
+        )}
+      </ProfileQuery>
     </nav>
   }
 }
