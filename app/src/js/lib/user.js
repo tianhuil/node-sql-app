@@ -8,8 +8,17 @@ const setToken = (token) => localStorage.setItem('token', token)
 
 const clearToken = () => setToken('')
 
+const userIdFromToken = (token) => {
+  try {
+    const payload = atob(token.split(".")[1])
+    return JSON.parse(payload).person_id
+  } catch(error) {
+    return null
+  }
+}
+
 export const UserContext = React.createContext({
-  userId: null,
+  userId: userIdFromToken(getToken()),
   logIn: ((token) => {}),
   logOut: (() => {})
 })
@@ -21,27 +30,26 @@ export class UserProvider extends React.Component {
     super(props)
 
     this.logIn = (token) => {
-      let userId = null
-      try {
-        const payload = atob(token.split(".")[1])
-        userId = JSON.parse(payload).person_id
-      } catch(error) {
+      const userId = userIdFromToken(token)
+      if (userId === null) {
         return false
+      } else {
+        setToken(token)
+        this.setState(state => ({userId: userId}))
+        return true
       }
-      setToken(token)
-      this.setState(state => ({userId: userId}))
-      return true
     }
 
     this.logOut = (client) => {
       clearToken()
       this.setState(state => ({userId: null}))
+      console.log(client)
       client.resetStore()
       client.cache.reset()
     }
 
     this.state = {
-      userId: null,
+      userId: userIdFromToken(getToken()),
       logIn: this.logIn,
       logOut: this.logOut
     }
@@ -49,20 +57,7 @@ export class UserProvider extends React.Component {
 
   render() {
     return <UserContext.Provider value={this.state}>
-        {this.props.children}
-      </UserContext.Provider>
-    // if (this.state.userId === null) {
-    // } else {
-    //   return <Query query={QueryUser}>
-    //     {({ error, data, client }) => {
-    //       if (error || !data || !data.currentPerson) {
-    //         this.logOut(client)
-    //       }
-    //       return <UserContext.Provider value={this.state}>
-    //         {this.props.children}
-    //       </UserContext.Provider>
-    //     }}
-    //   </Query>
-    // }
+      {this.props.children}
+    </UserContext.Provider>
   }
 }
