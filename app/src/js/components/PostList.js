@@ -41,8 +41,8 @@ const Post = (props) => (
       { props.node.createdAt &&
           <span className="mr-3">Written {(new Date(props.node.createdAt)).toString()}</span> }
       { <UserConsumer>
-        {({ user }) => {
-          if (user && user.id == props.node.personByAuthorId.id) {
+        {({ userId }) => {
+          if (userId == props.node.personByAuthorId.id) {
             return <Link to={`/edit/${props.node.id}`}>Edit</Link>
           } else {
             return null

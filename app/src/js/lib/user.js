@@ -8,17 +8,9 @@ const setToken = (token) => localStorage.setItem('token', token)
 
 const clearToken = () => setToken('')
 
-const QueryUser = gql`
-query {
-  currentPerson {
-    id
-    fullName
-  }
-}`
-
 export const UserContext = React.createContext({
-  user: null,
-  logIn: ((token, user) => {}),
+  userId: null,
+  logIn: ((token) => {}),
   logOut: (() => {})
 })
 
@@ -28,41 +20,49 @@ export class UserProvider extends React.Component {
   constructor(props) {
     super(props)
 
-    this.logIn = (token, user) => {
+    this.logIn = (token) => {
+      let userId = null
+      try {
+        const payload = atob(token.split(".")[1])
+        userId = JSON.parse(payload).person_id
+      } catch(error) {
+        return false
+      }
       setToken(token)
-      this.setState(state => ({user: user}))
+      this.setState(state => ({userId: userId}))
+      return true
     }
 
     this.logOut = (client) => {
       clearToken()
-      this.setState(state => ({user: null}))
+      this.setState(state => ({userId: null}))
       client.resetStore()
       client.cache.reset()
     }
 
     this.state = {
-      user: null,
+      userId: null,
       logIn: this.logIn,
       logOut: this.logOut
     }
   }
 
   render() {
-    if (this.state.user) {
-      return <Query query={QueryUser}>
-        {({ error, data, client }) => {
-          if (error || !data || !data.currentPerson) {
-            this.logOut(client)
-          }
-          return <UserContext.Provider value={this.state}>
-            {this.props.children}
-          </UserContext.Provider>
-        }}
-      </Query>
-    } else {
-      return <UserContext.Provider value={this.state}>
+    return <UserContext.Provider value={this.state}>
         {this.props.children}
       </UserContext.Provider>
-    }
+    // if (this.state.userId === null) {
+    // } else {
+    //   return <Query query={QueryUser}>
+    //     {({ error, data, client }) => {
+    //       if (error || !data || !data.currentPerson) {
+    //         this.logOut(client)
+    //       }
+    //       return <UserContext.Provider value={this.state}>
+    //         {this.props.children}
+    //       </UserContext.Provider>
+    //     }}
+    //   </Query>
+    // }
   }
 }

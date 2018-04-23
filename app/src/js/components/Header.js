@@ -13,6 +13,14 @@ mutation Authenticate($input: AuthenticateInput!) {
   }
 }`
 
+const QueryUser = gql`
+query {
+  currentPerson {
+    id
+    fullName
+  }
+}`
+
 class Search extends React.Component {
   constructor(props) {
     super(props)
@@ -44,9 +52,7 @@ class Login extends React.Component {
     this.handleLogin = (response) => {
       const jwtToken = response.data.authenticate.jwtToken
 
-      if (jwtToken) {
-        this.login()
-        this.setState({email: '', password: ''})
+      if (jwtToken && this.props.logIn(jwtToken)) {
         $("#dropdownMenuButton").dropdown('toggle')
       }
     }
@@ -109,26 +115,30 @@ class Login extends React.Component {
   }
 }
 
-class Logout extends React.Component {
-  render() {
-    return <div className="dropdown navbar-nav">
-      <button
-        className="btn btn-transparent btn-primary dropdown-toggle"
-        type="button"
-        id="dropdownMenuButton"
-        data-toggle="dropdown"
-        aria-haspopup="true"
-        aria-expanded="false"
-      >
-        Logout
-      </button>
-      <div className="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-        <h6 className="dropdown-header">{props.user.fullName}</h6>
-        <Link className="dropdown-item" to="/profile">Profile</Link>
-        <Link className="dropdown-item" to="#" onClick={this.logout}>Logout</Link>
-      </div>
+const Logout = (props) => {
+  return <div className="dropdown navbar-nav">
+    <button
+      className="btn btn-transparent btn-primary dropdown-toggle"
+      type="button"
+      id="dropdownMenuButton"
+      data-toggle="dropdown"
+      aria-haspopup="true"
+      aria-expanded="false"
+    >
+      Logout
+    </button>
+    <div className="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+      <Query query={QueryUser}>
+        {({ error, data, client }) => (data.currentPerson) ?
+           <h6 className="dropdown-header">{data.currentPerson.fullName}</h6> : null
+         }
+       </Query>
+      <Link className="dropdown-item" to="/profile">Profile</Link>
+      <UserConsumer>
+        {({ logOut }) => <Link className="dropdown-item" to="#" onClick={logOut}>Logout</Link> }
+      </UserConsumer>
     </div>
-  }
+  </div>
 }
 
 class Header extends React.Component {
@@ -137,12 +147,9 @@ class Header extends React.Component {
       <a className="navbar-brand mr-auto " href="/">Post Website</a>
       <Search redirect={false} />
       <UserConsumer>
-        {({ user, login, logout }) => (user) ?
-          <Logout user={user}
-                  logout={logout} /> :
-          <Login login={login}/>
-
-        }
+        {({ userId, logIn }) => (userId === null) ?
+          <Login logIn={logIn}/> :
+          <Logout/> }
       </UserConsumer>
     </nav>
   }
