@@ -135,7 +135,7 @@ const Logout = (props) => {
        </Query>
       <Link className="dropdown-item" to="/profile">Profile</Link>
       <UserConsumer>
-        {({ logOut }) => <Link className="dropdown-item" to="#" onClick={logOut}>Logout</Link> }
+        {({ logOut }) => <Link className="dropdown-item" to="/" onClick={logOut}>Logout</Link> }
       </UserConsumer>
     </div>
   </div>
@@ -144,7 +144,7 @@ const Logout = (props) => {
 class Header extends React.Component {
   render() {
     return <nav className="navbar navbar-expand-md navbar-dark bg-primary">
-      <a className="navbar-brand mr-auto " href="/">Post Website</a>
+      <Link className="navbar-brand mr-auto " to="/">Post Website</Link>
       <Search redirect={false} />
       <UserConsumer>
         {({ userId, logIn }) => (userId === null) ?
