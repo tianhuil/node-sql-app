@@ -115,8 +115,8 @@ class Login extends React.Component {
   }
 }
 
-const Logout = (props) => {
-  return <div className="dropdown navbar-nav">
+const Logout = (props) => (
+  <div className="dropdown navbar-nav">
     <button
       className="btn btn-transparent btn-primary dropdown-toggle"
       type="button"
@@ -139,20 +139,18 @@ const Logout = (props) => {
       </UserConsumer>
     </div>
   </div>
-}
+)
 
-class Header extends React.Component {
-  render() {
-    return <nav className="navbar navbar-expand-md navbar-dark bg-primary">
-      <Link className="navbar-brand mr-auto " to="/">Post Website</Link>
-      <Search redirect={false} />
-      <UserConsumer>
-        {({ userId, logIn }) => (userId === null) ?
-          <Login logIn={logIn}/> :
-          <Logout/> }
-      </UserConsumer>
-    </nav>
-  }
-}
+const Header = (props) => (
+  <nav className="navbar navbar-expand-md navbar-dark bg-primary">
+    <Link className="navbar-brand mr-auto " to="/">Post Website</Link>
+    <Search redirect={false} />
+    <UserConsumer>
+      {({ userId, logIn }) => (userId === null) ?
+        <Login logIn={logIn}/> :
+        <Logout/> }
+    </UserConsumer>
+  </nav>
+)
 
 export default Header
